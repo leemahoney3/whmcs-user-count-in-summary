@@ -1,6 +1,6 @@
 <?php
 
-use WHMCS\User\User;
+use WHMCS\Database\Capsule;
 
 /**
  * WHMCS User Count in Client Summary
@@ -44,11 +44,11 @@ function client_summary_user_count($vars) {
     if ($match) {
 
         # Get all users associated with the client, don't need anything from this, just need to count it.
-        $users = User::select('client_id')->where('client_id', $userid)->get();
+        $users = Capsule::table('tblusers_clients')->where('client_id', $userid)->count();
         
         $script =   '<script type="text/javascript">
                         $(document).ready(function() {
-                            $("#clientTab-3").append(" (' . count($users) . ')");   
+                            $("#clientTab-3").append(" (' . $users . ')");   
                             
                             $("#doRemove-ok").on("click", function () {
                                 location.reload();
@@ -59,6 +59,7 @@ function client_summary_user_count($vars) {
         return $script;
 
     }
+
 
 }
 
